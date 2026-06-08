@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ثبت‌نام کلاس</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Vazirmatn', sans-serif;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #0b0f19;
+  overflow: hidden;
+  color: white;
+}
+
+/* Glow blobs */
+.blob {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.25;
+}
+
+.blob1 { background: #3b82f6; top: -150px; left: -150px; }
+.blob2 { background: #8b5cf6; bottom: -150px; right: -150px; }
+
+.card {
+  width: 380px;
+  padding: 28px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  z-index: 2;
+  animation: fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.header p {
+  font-size: 13px;
+  color: #9ca3af;
+  margin-top: 6px;
+}
+
+input {
+  width: 100%;
+  padding: 12px 14px;
+  margin: 8px 0;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.05);
+  color: white;
+  outline: none;
+  transition: 0.2s;
+}
+
+input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59,130,246,0.2);
+}
+
+input::placeholder {
+  color: #6b7280;
+}
+
+.price {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 25px rgba(59,130,246,0.3);
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(59,130,246,0.15);
+  color: #60a5fa;
+  font-size: 11px;
+  margin-bottom: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+
+<div class="card">
+  <div class="header">
+    <div class="badge">Registration System</div>
+    <h1>ثبت‌نام کلاس</h1>
+    <p>پرداخت آنلاین و دریافت کد رهگیری</p>
+  </div>
+
+  <input id="name" placeholder="نام و نام خانوادگی" />
+  <input id="student_id" placeholder="شماره دانشجویی" />
+  <input id="phone" placeholder="شماره موبایل" />
+
+  <div class="price">💳 مبلغ: 150,000 تومان</div>
+
+  <button id="btn" onclick="submitForm()">پرداخت و ثبت‌نام</button>
+
+  <div class="footer">
+    پس از پرداخت، کد رهگیری نمایش داده می‌شود
+  </div>
+</div>
+
+<script>
+async function submitForm() {
+  const btn = document.getElementById("btn");
+
+  btn.innerText = "در حال اتصال به پرداخت...";
+  btn.classList.add("loading");
+
+  const data = {
+    name: document.getElementById("name").value,
+    student_id: document.getElementById("student_id").value,
+    phone: document.getElementById("phone").value
+  };
+
+  try {
+    const res = await fetch("https://script.google.com/macros/s/AKfycbx3IBq9_iuO_uFm3Z0bCWizF-uMy4W6ZWUfwWMIByaLdi_3-D-ufWAK7K5pkFIXgkzh/exec", {
+      method: "POST",
+      body: JSON.stringify(data)
+    });
+
+    const json = await res.json();
+    window.location.href = json.url;
+
+  } catch (err) {
+    btn.innerText = "خطا! دوباره تلاش کن";
+    btn.classList.remove("loading");
+  }
+}
+</script>
+
+</body>
+</html>
